@@ -1,4 +1,4 @@
 .idea
 .DS_Store
-.JSON_SECRETS
-.Outputs
+JSON_SECRETS/
+Outputs/
