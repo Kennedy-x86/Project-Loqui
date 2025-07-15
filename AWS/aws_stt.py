@@ -2,6 +2,8 @@ import os
 import boto3
 import time
 import json
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context #added to get by ssl certificate isses
 
 def run_aws_stt(audio_path, output_dir):
     s3 = boto3.client("s3")
