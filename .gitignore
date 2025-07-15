@@ -3,6 +3,11 @@
 .idea/
 .DS_Store
 
+_pycache/
+*.pyc
+*.pyo
+*.pyd
+
 # Ignore credentials and generated content
 JSON_SECRETS/
 input_texts/
