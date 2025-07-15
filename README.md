@@ -30,7 +30,7 @@
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/your-username/project-loqui.git
+git clone https://github.com/Kennedy-x86/Project-Loqui.git
 cd project-loqui
 ```
 
