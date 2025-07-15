@@ -1,4 +1,11 @@
-.idea
+
+# Ignore system files and IDE settings
+.idea/
 .DS_Store
+
+# Ignore credentials and generated content
 JSON_SECRETS/
-Outputs/
+input_texts/
+input_speech/
+generated_texts/
+generated_speech/
