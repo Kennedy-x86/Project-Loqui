@@ -1,6 +1,8 @@
 import os
 from GCC.gcc_tts import run_google_tts
 from GCC.gcc_stt import run_google_stt
+from AWS.aws_tts import run_aws_tts
+from AWS.aws_stt import run_aws_stt
 
 # === Directory Setup ===
 DIRS = {
@@ -29,13 +31,9 @@ def main():
 
     print("\nChoose a provider:")
     print("1. Google Cloud")
-    print("2. AWS (coming soon)")
+    print("2. AWS")
     print("3. Azure (coming soon)")
     provider = input("Select a provider (1, 2, or 3): ").strip()
-
-    if provider != "1":
-        print("Only Google Cloud is implemented at the moment.")
-        return
 
     # File selection
     if task == "1":
@@ -44,7 +42,13 @@ def main():
         if not os.path.isfile(full_path):
             print("File not found.")
             return
-        run_google_tts(full_path, DIRS["generated_speech"])
+
+        if provider == "1":
+            run_google_tts(full_path, DIRS["generated_speech"])
+        elif provider == "2":
+            run_aws_tts(full_path, DIRS["generated_speech"])
+        else:
+            print("Selected provider is not supported yet for TTS.")
 
     elif task == "2":
         filename = input("Enter the name of the audio file (in input_speech/): ").strip()
@@ -52,7 +56,13 @@ def main():
         if not os.path.isfile(full_path):
             print("File not found.")
             return
-        run_google_stt(full_path, DIRS["generated_texts"])
+
+        if provider == "1":
+            run_google_stt(full_path, DIRS["generated_texts"])
+        elif provider == "2":
+            run_aws_stt(full_path, DIRS["generated_texts"])
+        else:
+            print("Selected provider is not supported yet for STT.")
 
 if __name__ == "__main__":
     main()
