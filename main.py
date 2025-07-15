@@ -1,25 +1,58 @@
-from google.cloud import texttospeech
 import os
+from GCC.gcc_tts import run_google_tts
+from GCC.gcc_stt import run_google_stt
 
-client = texttospeech.TextToSpeechClient()
+# === Directory Setup ===
+DIRS = {
+    "input_texts": "input_texts",
+    "input_speech": "input_speech",
+    "generated_speech": "generated_speech",
+    "generated_texts": "generated_texts"
+}
 
-def synthesize(text, output_path):
-    input_text = texttospeech.SynthesisInput(text=text)
-    voice = texttospeech.VoiceSelectionParams(
-        language_code="en-US",
-        ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL,
-    )
-    audio_config = texttospeech.AudioConfig(
-        audio_encoding=texttospeech.AudioEncoding.LINEAR16,
-    )
+# Ensure all directories exist
+for dir_path in DIRS.values():
+    os.makedirs(dir_path, exist_ok=True)
 
-    response = client.synthesize_speech(
-        input=input_text, voice=voice, audio_config=audio_config
-    )
+# Set Google Cloud credentials
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "JSON_SECRETS/project-loqui-22510709e628.json"
 
-    with open(output_path, "wb") as out:
-        out.write(response.audio_content)
+def main():
+    print("Welcome to Project Loqui")
+    print("1. Text to Speech")
+    print("2. Speech to Text")
+    task = input("Select a task (1 or 2): ").strip()
 
-# Example use:
-for idx, sentence in enumerate(text_samples[:10]):
-    synthesize(sentence, f"tts_outputs/sample_{idx}.wav")
+    if task not in ["1", "2"]:
+        print("Invalid task selection.")
+        return
+
+    print("\nChoose a provider:")
+    print("1. Google Cloud")
+    print("2. AWS (coming soon)")
+    print("3. Azure (coming soon)")
+    provider = input("Select a provider (1, 2, or 3): ").strip()
+
+    if provider != "1":
+        print("Only Google Cloud is implemented at the moment.")
+        return
+
+    # File selection
+    if task == "1":
+        filename = input("Enter the name of the text file (in input_texts/): ").strip()
+        full_path = os.path.join(DIRS["input_texts"], filename)
+        if not os.path.isfile(full_path):
+            print("File not found.")
+            return
+        run_google_tts(full_path, DIRS["generated_speech"])
+
+    elif task == "2":
+        filename = input("Enter the name of the audio file (in input_speech/): ").strip()
+        full_path = os.path.join(DIRS["input_speech"], filename)
+        if not os.path.isfile(full_path):
+            print("File not found.")
+            return
+        run_google_stt(full_path, DIRS["generated_texts"])
+
+if __name__ == "__main__":
+    main()
