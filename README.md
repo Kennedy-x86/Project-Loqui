@@ -1,37 +1,37 @@
 # Project-Loqui
 
-**Project-Loqui** is a research and testing framework designed for evaluating the round-trip fidelity between Text-to-Speech (TTS) and Speech-to-Text (STT) tools using real-world input samples. This project was developed for CSCE 4460 (Software Testing and Empirical Methodologies) at the University of North Texas.
+**Project-Loqui** is a testing framework that evaluates the round-trip fidelity between Text-to-Speech (TTS) and Speech-to-Text (STT) services using various cloud providers. It supports real input from `.txt`, `.csv`, and `.wav` files and returns generated speech or transcripts through automated pipelines.
 
-## 📌 Objective
+## ✅ Features
 
-To empirically test how accurately cloud-based TTS and STT services preserve original meaning, formatting, and named entities when combined in a round-trip (text → speech → text) pipeline.
+- Text-to-Speech (TTS) and Speech-to-Text (STT) support
+- Google Cloud, AWS (Amazon Polly & Transcribe) support
+- Batch `.txt`, `.csv`, and `.wav` file processing
+- Outputs saved in organized directories
+- Interactive CLI workflow
 
-## 🧰 Technologies Used
-
-- **Google Cloud Text-to-Speech (TTS)**
-- **Google Cloud Speech-to-Text (STT)**
-- Python 3.11+
-- BERTScore and error metrics (WER, CER)
-
-## 📁 Repository Structure
+## 📁 Directory Structure
 
 ```
 .
-├── JSON_SECRETS/               # Google Cloud service account key
-│   └── project-loqui-xxxx.json
-├── gcc_tts.py                  # Sends text to Google TTS and saves audio
-├── gcc_stt.py                  # Sends audio to Google STT and gets transcript
-├── main.py                     # End-to-end round-trip testing logic
-├── README.md
-└── LICENSE
+├── input_texts/           # Text inputs (.txt or .csv)
+├── input_speech/          # Audio inputs (.wav)
+├── generated_speech/      # Output audio (.wav or .mp3)
+├── generated_texts/       # Output text (.txt)
+├── GCC/                   # Google Cloud handlers
+├── AWS/                   # AWS Polly and Transcribe handlers
+├── JSON_SECRETS/          # GCP credentials file
+├── main.py                # CLI runner
+├── requirements.txt
+└── README.md
 ```
 
-## 🚀 How to Use
+## 🚀 Usage
 
-1. Clone the repository:
+1. Clone this repository:
 ```bash
-git clone https://github.com/Kennedy-x86/Project-Loqui.git
-cd Project-Loqui
+git clone https://github.com/your-username/project-loqui.git
+cd project-loqui
 ```
 
 2. Install dependencies:
@@ -39,24 +39,49 @@ cd Project-Loqui
 pip install -r requirements.txt
 ```
 
-3. Set your Google credentials in code or via environment variable:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS="JSON_SECRETS/project-loqui-xxxx.json"
-```
+3. Configure Google Cloud:
+- Download your `project-loqui-xxxx.json` key from GCP
+- Place it in `JSON_SECRETS/`
+- `main.py` will pick it up automatically
 
-4. Run the test script:
+4. Configure AWS:
+```bash
+aws configure
+```
+Enter:
+- Access Key ID
+- Secret Access Key
+- Region: `us-east-1`
+- Output format: `json`
+
+5. Place your inputs:
+- Text files into `input_texts/`
+- Audio files into `input_speech/`
+
+6. Run the app:
 ```bash
 python main.py
 ```
 
-## 📊 Evaluation Metrics
+Then follow the prompt to select:
+- Task (TTS or STT)
+- Provider (Google Cloud or AWS)
+- Input file name
 
-- **Word Error Rate (WER)**
-- **Character Error Rate (CER)**
-- **Semantic Similarity (BERTScore)**
-- **Punctuation and Named Entity Consistency**
+## 🌐 Supported Providers
 
-## 👥 Team Members
+| Provider      | TTS Support | STT Support |
+|---------------|-------------|-------------|
+| Google Cloud  | ✅           | ✅           |
+| Amazon AWS    | ✅ (Polly)   | ✅ (Transcribe) |
+| Microsoft Azure | coming soon | coming soon |
+
+## 🔐 Notes
+
+- Your `.gitignore` ensures no credentials or generated content is committed.
+- You must create and configure your own IAM user and credentials for AWS access.
+
+## 👥 Contributors
 
 - Kennedy Onyema-Willys
 - Harshita Koppaka
@@ -65,4 +90,4 @@ python main.py
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+MIT License
