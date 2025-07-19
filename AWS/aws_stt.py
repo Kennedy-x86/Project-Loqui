@@ -3,6 +3,7 @@ import boto3
 import time
 import json
 import ssl
+import uuid
 ssl._create_default_https_context = ssl._create_unverified_context #added to get by ssl certificate isses
 
 def run_aws_stt(audio_path, output_dir):
@@ -11,7 +12,7 @@ def run_aws_stt(audio_path, output_dir):
 
     # Configuration
     bucket_name = "project-loqui-audio"  # Replace with your actual bucket name
-    job_name = os.path.splitext(os.path.basename(audio_path))[0]
+    job_name = f"{os.path.splitext(os.path.basename(audio_path))[0]}-{uuid.uuid4().hex[:6]}"
     s3_key = os.path.basename(audio_path)
     job_uri = f"s3://{bucket_name}/{s3_key}"
 
