@@ -1,8 +1,15 @@
 import os
+from dotenv import load_dotenv
+
 from GCC.gcc_tts import run_google_tts
 from GCC.gcc_stt import run_google_stt
 from AWS.aws_tts import run_aws_tts
 from AWS.aws_stt import run_aws_stt
+from AZURE.azure_tts import run_azure_tts
+from AZURE.azure_stt import run_azure_stt
+
+# Load environment variables from .env file
+load_dotenv()
 
 # === Directory Setup ===
 DIRS = {
@@ -32,7 +39,7 @@ def main():
     print("\nChoose a provider:")
     print("1. Google Cloud")
     print("2. AWS")
-    print("3. Azure (coming soon)")
+    print("3. Azure")
     provider = input("Select a provider (1, 2, or 3): ").strip()
 
     # File selection
@@ -47,8 +54,10 @@ def main():
             run_google_tts(full_path, DIRS["generated_speech"])
         elif provider == "2":
             run_aws_tts(full_path, DIRS["generated_speech"])
+        elif provider == "3":
+            run_azure_tts(full_path, DIRS["generated_speech"])
         else:
-            print("Selected provider is not supported yet for TTS.")
+            print("Selected provider is not supported.")
 
     elif task == "2":
         filename = input("Enter the name of the audio file (in input_speech/): ").strip()
@@ -61,8 +70,10 @@ def main():
             run_google_stt(full_path, DIRS["generated_texts"])
         elif provider == "2":
             run_aws_stt(full_path, DIRS["generated_texts"])
+        elif provider == "3":
+            run_azure_stt(full_path, DIRS["generated_texts"])
         else:
-            print("Selected provider is not supported yet for STT.")
+            print("Selected provider is not supported.")
 
 if __name__ == "__main__":
     main()
