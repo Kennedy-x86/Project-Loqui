@@ -5,10 +5,11 @@
 ## ✅ Features
 
 - Text-to-Speech (TTS) and Speech-to-Text (STT) support
-- Google Cloud, AWS (Amazon Polly & Transcribe) support
+- Google Cloud, AWS (Amazon Polly & Transcribe), and Azure Cognitive Services
 - Batch `.txt`, `.csv`, and `.wav` file processing
 - Outputs saved in organized directories
 - Interactive CLI workflow
+- Uses `.env` for secure environment variable management
 
 ## 📁 Directory Structure
 
@@ -20,8 +21,10 @@
 ├── generated_texts/       # Output text (.txt)
 ├── GCC/                   # Google Cloud handlers
 ├── AWS/                   # AWS Polly and Transcribe handlers
+├── AZURE/                 # Azure TTS and STT handlers
 ├── JSON_SECRETS/          # GCP credentials file
 ├── main.py                # CLI runner
+├── .env                   # Environment variables for Azure
 ├── requirements.txt
 └── README.md
 ```
@@ -54,32 +57,40 @@ Enter:
 - Region: `us-east-1`
 - Output format: `json`
 
-5. Place your inputs:
+5. Configure Azure:
+- Create a Speech resource in the Azure Portal
+- In the root directory, create a file named `.env`:
+```env
+AZURE_SPEECH_KEY=your-azure-key
+AZURE_REGION=eastus
+```
+
+6. Place your inputs:
 - Text files into `input_texts/`
 - Audio files into `input_speech/`
 
-6. Run the app:
+7. Run the app:
 ```bash
 python main.py
 ```
 
 Then follow the prompt to select:
 - Task (TTS or STT)
-- Provider (Google Cloud or AWS)
+- Provider (Google Cloud, AWS, or Azure)
 - Input file name
 
 ## 🌐 Supported Providers
 
-| Provider      | TTS Support | STT Support |
-|---------------|-------------|-------------|
-| Google Cloud  | ✅           | ✅           |
-| Amazon AWS    | ✅ (Polly)   | ✅ (Transcribe) |
-| Microsoft Azure | coming soon | coming soon |
+| Provider         | TTS Support     | STT Support     |
+|------------------|------------------|------------------|
+| Google Cloud     | ✅               | ✅               |
+| Amazon AWS       | ✅ (Polly)       | ✅ (Transcribe)  |
+| Microsoft Azure  | ✅ (Neural TTS)  | ✅ (Speech SDK)  |
 
 ## 🔐 Notes
 
-- Your `.gitignore` ensures no credentials or generated content is committed.
-- You must create and configure your own IAM user and credentials for AWS access.
+- `.gitignore` protects sensitive directories like credentials and output.
+- Azure uses a `.env` file. Google uses JSON credentials. AWS uses `aws configure`.
 
 ## 👥 Contributors
 
