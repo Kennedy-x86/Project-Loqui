@@ -1,7 +1,7 @@
 import os
 import glob
 from dotenv import load_dotenv
-from jiwer import wer, cer
+from jiwer import wer, cer, Compose, RemovePunctuation, ToLowerCase, RemoveMultipleSpaces, Strip
 import matplotlib.pyplot as plt
 
 from GCC.gcc_tts import run_google_tts
@@ -29,6 +29,13 @@ DIRS = {
 for path in DIRS.values():
     os.makedirs(path, exist_ok=True)
 
+# Normalization transform for fair comparison
+transform = Compose([
+    RemovePunctuation(),
+    ToLowerCase(),
+    RemoveMultipleSpaces(),
+    Strip()
+])
 
 def run_automated_stt_test():
     reference_path = "passage.txt"
@@ -37,7 +44,7 @@ def run_automated_stt_test():
         return
 
     with open(reference_path, "r") as f:
-        reference = f.read().strip().lower()
+        reference = f.read().strip()
 
     audio_files = [f for f in os.listdir(DIRS["auto_audio"]) if f.endswith(".wav")]
     if not audio_files:
@@ -73,8 +80,11 @@ def run_automated_stt_test():
                     raise Exception("No output generated.")
 
                 with open(matches[0], "r") as out:
-                    prediction = out.read().strip().lower()
-                    scores[tool_name].append((wer(reference, prediction), cer(reference, prediction)))
+                    prediction = out.read().strip()
+                    scores[tool_name].append((
+                        wer(reference, prediction, truth_transform=transform, hypothesis_transform=transform),
+                        cer(reference, prediction, truth_transform=transform, hypothesis_transform=transform)
+                    ))
             except Exception as e:
                 print(f"❌ {tool_name} failed on {filename}: {e}")
                 failures.append((tool_name, filename))
