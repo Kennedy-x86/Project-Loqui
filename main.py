@@ -29,7 +29,7 @@ DIRS = {
 for path in DIRS.values():
     os.makedirs(path, exist_ok=True)
 
-# Normalization transform for fair comparison
+# Manual normalization transform
 transform = Compose([
     RemovePunctuation(),
     ToLowerCase(),
@@ -45,6 +45,8 @@ def run_automated_stt_test():
 
     with open(reference_path, "r") as f:
         reference = f.read().strip()
+
+    reference_clean = transform(reference)
 
     audio_files = [f for f in os.listdir(DIRS["auto_audio"]) if f.endswith(".wav")]
     if not audio_files:
@@ -81,9 +83,11 @@ def run_automated_stt_test():
 
                 with open(matches[0], "r") as out:
                     prediction = out.read().strip()
+                    prediction_clean = transform(prediction)
+
                     scores[tool_name].append((
-                        wer(reference, prediction, truth_transform=transform, hypothesis_transform=transform),
-                        cer(reference, prediction, truth_transform=transform, hypothesis_transform=transform)
+                        wer(reference_clean, prediction_clean),
+                        cer(reference_clean, prediction_clean)
                     ))
             except Exception as e:
                 print(f"❌ {tool_name} failed on {filename}: {e}")
