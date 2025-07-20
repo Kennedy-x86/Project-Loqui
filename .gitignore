@@ -1,18 +1,34 @@
-
-# Ignore system files and IDE settings
+# System and IDE files
 .idea/
 .DS_Store
 .env
 
-_pycache/
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Ignore credentials and generated content
+# Secrets
 JSON_SECRETS/
-input_texts/
-input_speech/
-generated_texts/
-generated_speech/
-speech_accent_archive/
+
+# Input/output/testing data — track folders, ignore contents
+input_texts/*
+!input_texts/.gitkeep
+
+input_speech/*
+!input_speech/.gitkeep
+
+generated_texts/*
+!generated_texts/.gitkeep
+
+generated_speech/*
+!generated_speech/.gitkeep
+
+automated_results/*
+!automated_results/.gitkeep
+
+automated_speech_dataset/*
+!automated_speech_dataset/.gitkeep
+
+automated_text_dataset/*
+!automated_text_dataset/.gitkeep
